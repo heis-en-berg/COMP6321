@@ -19,7 +19,7 @@ le.fit(unique_labels)
 y = le.transform(y)
 
 # split data into training and test set
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=0)
 
 # cross validation for hyperparameter tuning
 n_neighbors = [1,3,5,7,9,11,13,15]
@@ -32,7 +32,7 @@ parameters = {
         'algorithm': algorithm
         }
 knn=KNeighborsClassifier()
-grid_search=GridSearchCV(knn, param_grid=parameters, cv=3, verbose=1, n_jobs=-1)
+grid_search=GridSearchCV(knn, param_grid=parameters, cv=10, verbose=1, n_jobs=-1)
 grid_search.fit(X_train, y_train)
 
 print("\n\nBest Estimator: " + str(grid_search.best_estimator_))
