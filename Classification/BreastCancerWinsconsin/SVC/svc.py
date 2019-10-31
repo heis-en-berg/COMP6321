@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn import preprocessing
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score
@@ -26,17 +26,18 @@ X = scaler.fit_transform(X)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=0)
 
 # cross validation for hyperparameter tuning
-n_neighbors = [1,3,5,7,9,11,13,15]
-algorithm = ["ball_tree", "kd_tree", "brute", "auto"]
-metric = ["euclidean", "manhattan", "chebyshev", "minkowski"]
-algorithm
+kernel = ["poly", "rbf"]
+degree = np.linspace(1,5,5)
+gamma = np.linspace(1,5,5)
+coef0 = [0,0.1,1,2,3]
 parameters = {
-        'n_neighbors': n_neighbors,
-        'metric': metric,
-        'algorithm': algorithm
+        'kernel': kernel,
+        'degree': degree,
+        'gamma': gamma,
+        'coef0': coef0
         }
-knn=KNeighborsClassifier()
-grid_search=GridSearchCV(knn, param_grid=parameters, cv=10, verbose=1, n_jobs=-1)
+svc=SVC(random_state=0)
+grid_search=GridSearchCV(svc, param_grid=parameters, cv=10, verbose=1, n_jobs=-1)
 grid_search.fit(X_train, y_train)
 
 print("\n\nBest Estimator: " + str(grid_search.best_estimator_))
@@ -46,6 +47,3 @@ print("Best params: " + str(grid_search.best_params_))
 # Test Data Accuracy Score
 y_test_pred = grid_search.best_estimator_.predict(X_test)
 print("Test Data Accuracy Score: " + str(accuracy_score(y_test, y_test_pred)))
-
-#print(grid_search.cv_results_.keys())
-
