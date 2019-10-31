@@ -6,7 +6,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score
 
 # read data (dataset at "https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)")
-filename = "../data/wdbc.data"
+filename = "../../data/wdbc.data"
 feature_columns_index = np.arange(2,32)
 label_column_index = 1
 X = np.loadtxt(filename, delimiter=',', usecols = feature_columns_index)
