@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import GaussianNB
+from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
@@ -23,9 +23,16 @@ X = scaler.fit_transform(X)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=0)
 
 # cross validation for hyperparameter tuning
-parameters = {}
-gnbc=GaussianNB()
-grid_search=GridSearchCV(gnbc, param_grid=parameters, cv=10, verbose=1, n_jobs=-1)
+hidden_layer_sizes = [(100,50,), (100,50,20,)]
+learning_rate = ["constant", "invscaling", "adaptive"]
+max_iter = [200, 250, 300]
+parameters = {
+        'hidden_layer_sizes': hidden_layer_sizes,
+        'learning_rate': learning_rate,
+        'max_iter': max_iter
+        }
+mlp=MLPClassifier(random_state=0)
+grid_search=GridSearchCV(mlp, param_grid=parameters, cv=5, verbose=1, n_jobs=-1)
 grid_search.fit(X_train, y_train)
 
 print("\n\nBest Estimator: " + str(grid_search.best_estimator_))
