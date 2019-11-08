@@ -1,2 +1,4 @@
 Classification/data/*
 !Classification/data/.keep
+Regression/data/*
+!Regression/data/.keep
