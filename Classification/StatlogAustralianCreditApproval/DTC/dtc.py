@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import accuracy_score
 
 # read data (dataset at "http://archive.ics.uci.edu/ml/datasets/statlog+(australian+credit+approval)")
@@ -11,28 +11,28 @@ data = np.loadtxt(filename, delimiter=' ')
 X = data[:,:14]
 y = data[:,14]
 
-# preprocessing - scaling data and features removal
-scaler = StandardScaler()
-X = scaler.fit_transform(X)
-
 # split data into training and test set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=0)
 
+# preprocessing - scaling data and features removal
+scaler_train = StandardScaler()
+X_train = scaler_train.fit_transform(X_train)
+scaler_test = StandardScaler()
+X_test = scaler_test.fit_transform(X_test)
+
 # cross validation for hyperparameter tuning
-max_depth = [None,5,7,10,13,15,20]
-criterion = ["gini", "entropy"]
-parameters = {
-        'max_depth': max_depth,
-        'criterion': criterion
+param_distributions = {
+        'max_depth': np.linspace(1,30,10, dtype=np.int32),
+        'criterion': ["gini", "entropy"]
         }
 dtc=DecisionTreeClassifier(random_state=0)
-grid_search=GridSearchCV(dtc, param_grid=parameters, cv=10, verbose=1, n_jobs=-1)
-grid_search.fit(X_train, y_train)
+randcv = RandomizedSearchCV(dtc, param_distributions, n_iter=50, verbose=1, random_state=0, cv=10)
+randcv.fit(X_train, y_train)
 
-print("\n\nBest Estimator: " + str(grid_search.best_estimator_))
-print("Score: " + str(grid_search.best_score_))
-print("Best params: " + str(grid_search.best_params_))
+print("\n\nBest Estimator: " + str(randcv.best_estimator_))
+print("Score: " + str(randcv.best_score_))
+print("Best params: " + str(randcv.best_params_))
 
 # Test Data Accuracy Score
-y_test_pred = grid_search.best_estimator_.predict(X_test)
+y_test_pred = randcv.best_estimator_.predict(X_test)
 print("Test Data Accuracy Score: " + str(accuracy_score(y_test, y_test_pred)))
