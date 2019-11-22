@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import StandardScaler
+import scipy.stats
 
 '''
 NOTE: >3 minutes
@@ -32,10 +33,13 @@ def applySVC(features_to_be_removed):
     
     # cross validation for hyperparameter tuning    
     param_distributions = {
+            'C'     : scipy.stats.reciprocal(1.0, 1000.),
             'kernel' : ["poly", "rbf"],
-            'degree' : np.linspace(1,5,5),
-            'gamma' : np.linspace(1,5,5),
-            'coef0': [0,0.1,1,2,3]
+            'degree' : np.linspace(1,10,5, dtype=np.int32),
+            'gamma' : np.linspace(1,15,10, dtype=np.int32),
+            'coef0': [0,0.1,1,2,3],
+            'max_iter' : [20000],
+            'cache_size' : [1000]
     }
 
     svc=SVC(random_state=0)

@@ -4,7 +4,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import accuracy_score
-import scipy.stats
 
 # read data (dataset at "https://archive.ics.uci.edu/ml/datasets/Diabetic+Retinopathy+Debrecen+Data+Set")
 filename = "../../data/messidor_features.arff"
@@ -35,7 +34,7 @@ def applyKnn(features_to_be_removed):
     }
     
     knn=KNeighborsClassifier()
-    randcv = RandomizedSearchCV(knn, param_distributions, n_iter=100, verbose=1, random_state=0, cv=5)
+    randcv = RandomizedSearchCV(knn, param_distributions, n_iter=50, verbose=1, random_state=0, cv=5)
     randcv.fit(X_train, y_train)
     
     print("\n\nBest Estimator: " + str(randcv.best_estimator_))
