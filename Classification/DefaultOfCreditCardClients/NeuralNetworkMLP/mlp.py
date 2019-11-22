@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import accuracy_score
 
 # read data (dataset at "https://archive.ics.uci.edu/ml/datasets/default+of+credit+card+clients")
@@ -17,34 +17,33 @@ def applyMLP(features_to_be_removed):
     X = data[:,:23]
     y = data[:,23]
     
-    # preprocessing - scaling data and features removal
-    scaler = StandardScaler()
-    X = scaler.fit_transform(X)
-    X = np.delete(X, np.s_[features_to_be_removed], axis=1)
-    
     # split data into training and test set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=0)
     
+    # preprocessing - scaling data and features removal
+    scaler_train = StandardScaler()
+    X_train = scaler_train.fit_transform(X_train)
+    scaler_test = StandardScaler()
+    X_test = scaler_test.fit_transform(X_test)
+    X_train = np.delete(X_train, np.s_[features_to_be_removed], axis=1)
+    X_test = np.delete(X_test, np.s_[features_to_be_removed], axis=1)
+    
     # cross validation for hyperparameter tuning
-    hidden_layer_sizes = [(100,50,20,)]
-    learning_rate = ["constant"]#, "invscaling", "adaptive"]
-    max_iter = [200]#, 250]
-    parameters = {
-            'hidden_layer_sizes': hidden_layer_sizes,
-            'learning_rate': learning_rate,
-            'max_iter': max_iter
+    param_distributions = {
+            'hidden_layer_sizes': [(100,50,), (100,50,20,)],
+            'learning_rate': ["constant", "invscaling", "adaptive"],
+            'max_iter': [200, 250]
             }
     mlp=MLPClassifier(random_state=0)
-    grid_search=GridSearchCV(mlp, param_grid=parameters, cv=5, verbose=1, n_jobs=-1)
-    grid_search.fit(X_train, y_train)
-
+    randcv = RandomizedSearchCV(mlp, param_distributions, n_iter=50, verbose=1, random_state=0, cv=5)
+    randcv.fit(X_train, y_train)
     
-    print("\n\nBest Estimator: " + str(grid_search.best_estimator_))
-    print("Score: " + str(grid_search.best_score_))
-    print("Best params: " + str(grid_search.best_params_))
+    print("\n\nBest Estimator: " + str(randcv.best_estimator_))
+    print("Score: " + str(randcv.best_score_))
+    print("Best params: " + str(randcv.best_params_))
     
     # Test Data Accuracy Score
-    y_test_pred = grid_search.best_estimator_.predict(X_test)
+    y_test_pred = randcv.best_estimator_.predict(X_test)
     print("Test Data Accuracy Score: " + str(accuracy_score(y_test, y_test_pred)))
 
 

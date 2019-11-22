@@ -1,14 +1,21 @@
 import numpy as np
+import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import accuracy_score
 
-# read data (dataset at "https://archive.ics.uci.edu/ml/datasets/Diabetic+Retinopathy+Debrecen+Data+Set")
-filename = "../../data/messidor_features.arff"
-data = np.loadtxt(filename, delimiter=',', skiprows=24)
-feature_removal_list = [[0],[1],np.arange(2,8),np.arange(8,16),[16],[17],[18]]
+
+'''
+NOTE: TODO
+'''
+
+# read data (dataset at "https://archive.ics.uci.edu/ml/datasets/default+of+credit+card+clients")
+filename = "../../data/data.xls"
+data = np.asarray(pd.read_excel(filename, index_col=0, skiprows=1))
+
+feature_removal_list = [[0],[1],[2],[3],[4],np.arange(5,11),np.arange(11,17),np.arange(17,23)]
 
 def applyRFC(features_to_be_removed):
     print('Features removed: ' + str(features_to_be_removed))
@@ -29,11 +36,11 @@ def applyRFC(features_to_be_removed):
     # cross validation for hyperparameter tuning
     param_distributions = {
             'n_estimators': np.linspace(10,100,10, dtype=np.int32),
-            'max_depth': np.linspace(1,30,10, dtype=np.int32),
+            'max_depth': np.linspace(1,15,7, dtype=np.int32),
             'criterion': ["gini", "entropy"]
             }
     rfc=RandomForestClassifier(random_state=0, n_jobs=-1)
-    randcv = RandomizedSearchCV(rfc, param_distributions, n_iter=100, verbose=1, random_state=0, cv=5)
+    randcv = RandomizedSearchCV(rfc, param_distributions, n_iter=50, verbose=1, random_state=0, cv=5)
     randcv.fit(X_train, y_train)
     
     print("\n\nBest Estimator: " + str(randcv.best_estimator_))
@@ -53,7 +60,7 @@ print('\n\n\n############################# Model with all the features #########
 applyRFC([])
 
 print('\n\n\n############################# Final Test #############################')
-final_features_to_be_removed = [0,16,17] 
+final_features_to_be_removed = np.concatenate((np.arange(0,4),np.arange(11,23)))
 print('Features observed to have negative effect on accuracy score: ' + str(final_features_to_be_removed))
 applyRFC(final_features_to_be_removed)
     
