@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVR
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import RandomizedSearchCV
 from matplotlib.dates import datestr2num
 from sklearn.metrics import mean_squared_error
 
@@ -15,32 +15,33 @@ data = np.loadtxt(filename, delimiter=',', skiprows=1, converters = {1: convert_
 X = data[:,:16]
 y = data[:,16]
 
-# preprocessing - scaling data and features removal
-scaler = StandardScaler()
-X = scaler.fit_transform(X)
-
 # split data into training and test set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=0)
 
+# scaling data
+x_scaler = StandardScaler()
+X_train = x_scaler.fit_transform(X_train)
+X_test = x_scaler.fit_transform(X_test)
+
+y_scaler = StandardScaler()
+y_train = y_scaler.fit_transform(y_train.values.reshape(-1,1)).reshape(-1)
+y_test = y_scaler.fit_transform(y_test.values.reshape(-1,1)).reshape(-1)
+
 # cross validation for hyperparameter tuning
-degree = [4]#[1,2,3,4]
-kernel = ['linear']#, 'poly', 'rbf']
-gamma = [1]#[1,10,20]
-coef0 = [1]#[1,5,10]
-parameters = {
-        'degree': degree,
-        'kernel': kernel,
-        'gamma': gamma,
-        'coef0': coef0
+param_distributions = {
+        'degree': [1,2,3,4],
+        'kernel': ['linear', 'poly', 'rbf'],
+        'gamma': [1,10,20],
+        'coef0': [1,5,10]
         }
 svr=SVR()
-grid_search=GridSearchCV(svr, param_grid=parameters, cv=5, verbose=1, n_jobs=-1)
-grid_search.fit(X_train, y_train)
+randcv = RandomizedSearchCV(svr, param_distributions, n_iter=100, verbose=1, random_state=0, cv=10)
+randcv.fit(X_train, y_train)
 
-print("\n\nBest Estimator: " + str(grid_search.best_estimator_))
-print("Score: " + str(grid_search.best_score_))
-print("Best params: " + str(grid_search.best_params_))
+print("\n\nBest Estimator: " + str(randcv.best_estimator_))
+print("Score: " + str(randcv.best_score_))
+print("Best params: " + str(randcv.best_params_))
 
 # Test Data Accuracy Score
-y_test_pred = grid_search.best_estimator_.predict(X_test)
+y_test_pred = randcv.best_estimator_.predict(X_test)
 print("Test Data mean_squared_error: " + str(mean_squared_error(y_test, y_test_pred)))

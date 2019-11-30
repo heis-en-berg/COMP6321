@@ -2,8 +2,8 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process.kernels import DotProduct, ExpSineSquared, RBF
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.gaussian_process.kernels import DotProduct, RBF
 from matplotlib.dates import datestr2num
 from sklearn.metrics import mean_squared_error
 
@@ -16,28 +16,30 @@ data = np.loadtxt(filename, delimiter=',', skiprows=1, converters = {1: convert_
 X = data[:,:16]
 y = data[:,16]
 
-# preprocessing - scaling data and features removal
-scaler = StandardScaler()
-X = scaler.fit_transform(X)
-scaler_y = StandardScaler()
-y = scaler_y.fit_transform(y.reshape(-1,1)).reshape(-1)
-
 # split data into training and test set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=0)
 
-# cross validation for hyperparameter tuning
-kernel = [RBF()]#, ExpSineSquared(), RBF(), RBF() + DotProduct()]
-parameters = {
-        'kernel': kernel
-        }
-gpr=GaussianProcessRegressor(random_state=0, kernel=RBF())
-#grid_search=GridSearchCV(gpr, param_grid=parameters, cv=5, verbose=1, n_jobs=-1)
-gpr.fit(X_train, y_train)
+# scaling data
+x_scaler = StandardScaler()
+X_train = x_scaler.fit_transform(X_train)
+X_test = x_scaler.fit_transform(X_test)
 
-#print("\n\nBest Estimator: " + str(grid_search.best_estimator_))
-print("Score: " + str(gpr.score(X_train, y_train)))
-#print("Best params: " + str(grid_search.best_params_))
+y_scaler = StandardScaler()
+y_train = y_scaler.fit_transform(y_train.values.reshape(-1,1)).reshape(-1)
+y_test = y_scaler.fit_transform(y_test.values.reshape(-1,1)).reshape(-1)
+
+# cross validation for hyperparameter tuning
+param_distributions = {
+        'kernel': [RBF(), RBF() + DotProduct()]
+        }
+gpr=GaussianProcessRegressor(random_state=0)
+randcv = RandomizedSearchCV(gpr, param_distributions, n_iter=100, verbose=1, random_state=0, cv=10)
+randcv.fit(X_train, y_train)
+
+print("\n\nBest Estimator: " + str(randcv.best_estimator_))
+print("Score: " + str(randcv.best_score_))
+print("Best params: " + str(randcv.best_params_))
 
 # Test Data Accuracy Score
-y_test_pred = gpr.predict(X_test)
+y_test_pred = randcv.best_estimator_.predict(X_test)
 print("Test Data mean_squared_error: " + str(mean_squared_error(y_test, y_test_pred)))
