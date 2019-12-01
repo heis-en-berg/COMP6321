@@ -20,16 +20,16 @@ def applyADBC(features_to_be_removed):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=0)
     
     # preprocessing - scaling data and features removal
-    scaler_train = StandardScaler()
-    X_train = scaler_train.fit_transform(X_train)
-    scaler_test = StandardScaler()
-    X_test = scaler_test.fit_transform(X_test)
     X_train = np.delete(X_train, np.s_[features_to_be_removed], axis=1)
     X_test = np.delete(X_test, np.s_[features_to_be_removed], axis=1)
     
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.fit_transform(X_test)
+    
     # cross validation for hyperparameter tuning
     param_distributions = {
-            'n_estimators': np.linspace(50,200, 10, dtype=np.int32),
+            'n_estimators': scipy.stats.randint(50,200),
             'learning_rate': scipy.stats.reciprocal(1.0, 3.0),
             'algorithm': ["SAMME", "SAMME.R"]
             }

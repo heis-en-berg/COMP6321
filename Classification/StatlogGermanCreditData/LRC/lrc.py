@@ -19,10 +19,9 @@ y = data[:,20]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=0)
 
 # preprocessing - scaling data and features removal
-scaler_train = StandardScaler()
-X_train = scaler_train.fit_transform(X_train)
-scaler_test = StandardScaler()
-X_test = scaler_test.fit_transform(X_test)
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.fit_transform(X_test)
 
 # cross validation for hyperparameter tuning
 param_distributions = {

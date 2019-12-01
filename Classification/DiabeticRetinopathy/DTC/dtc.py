@@ -3,6 +3,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import RandomizedSearchCV
+import scipy
 from sklearn.metrics import accuracy_score
 
 # read data (dataset at "https://archive.ics.uci.edu/ml/datasets/Diabetic+Retinopathy+Debrecen+Data+Set")
@@ -19,18 +20,15 @@ def applyDTC(features_to_be_removed):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=0)
     
     # preprocessing - scaling data and features removal
-    scaler_train = StandardScaler()
-    X_train = scaler_train.fit_transform(X_train)
-    scaler_test = StandardScaler()
-    X_test = scaler_test.fit_transform(X_test)
     X_train = np.delete(X_train, np.s_[features_to_be_removed], axis=1)
     X_test = np.delete(X_test, np.s_[features_to_be_removed], axis=1)
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.fit_transform(X_test)
     
     # cross validation for hyperparameter tuning
-    #max_depth = [None,5,7,10,13,15,20]
-    #criterion = ["gini", "entropy"]
     param_distributions = {
-            'max_depth': np.linspace(1,30,10, dtype=np.int32),
+            'max_depth': scipy.stats.randint(1,30),
             'criterion': ["gini", "entropy"]
             }
     dtc=DecisionTreeClassifier(random_state=0)

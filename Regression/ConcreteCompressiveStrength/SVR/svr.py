@@ -3,6 +3,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVR
 from sklearn.model_selection import RandomizedSearchCV
+import scipy
 from sklearn.metrics import mean_squared_error
 
 # read data (dataset at "http://archive.ics.uci.edu/ml/datasets/Concrete+Compressive+Strength")
@@ -26,10 +27,10 @@ y_test = y_scaler.fit_transform(y_test.values.reshape(-1,1)).reshape(-1)
 
 # cross validation for hyperparameter tuning
 param_distributions = {
-        'degree': [1,2,3,4],
+        'degree': scipy.stats.randint(1,10),
         'kernel': ['linear', 'poly', 'rbf'],
-        'gamma': [1,10,20],
-        'coef0': [1,5,10]
+        'gamma': scipy.stats.randint(1,10),
+        'coef0': scipy.stats.randint(1,5)
         }
 svr=SVR()
 randcv = RandomizedSearchCV(svr, param_distributions, n_iter=100, verbose=1, random_state=0, cv=10)

@@ -27,23 +27,24 @@ def applySVC(features_to_be_removed):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=0)
     
     # preprocessing - scaling data and features removal
-    scaler_train = StandardScaler()
-    X_train = scaler_train.fit_transform(X_train)
-    scaler_test = StandardScaler()
-    X_test = scaler_test.fit_transform(X_test)
     X_train = np.delete(X_train, np.s_[features_to_be_removed], axis=1)
     X_test = np.delete(X_test, np.s_[features_to_be_removed], axis=1)
     
+    # preprocessing - scaling data and features removal
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.fit_transform(X_test)
+    
     # cross validation for hyperparameter tuning    
     param_distributions = {
-            'C'     : scipy.stats.reciprocal(1.0, 1000.),
-            'kernel' : ["poly", "rbf"],
-            'degree' : np.linspace(1,10,5, dtype=np.int32),
-            'gamma' : np.linspace(1,15,10, dtype=np.int32),
-            'coef0': [0,0.1,1,2,3],
-            'max_iter' : [20000],
-            'cache_size' : [1000]
-    }
+        'C'     : scipy.stats.reciprocal(1.0, 1000.),
+        'kernel' : ["poly", "rbf"],
+        'degree' : scipy.stats.randint(1,10),
+        'gamma' : scipy.stats.randint(1,15),
+        'coef0': [0,0.1,1,2,3],
+        'max_iter' : [20000],
+        'cache_size' : [1000]
+        }
 
     svc=SVC(random_state=0)
     randcv = RandomizedSearchCV(svc, param_distributions, n_iter=100, verbose=1, random_state=0, cv=5)
