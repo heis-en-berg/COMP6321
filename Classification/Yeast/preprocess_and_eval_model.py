@@ -34,7 +34,7 @@ def load_and_preprocess_data(filename):
 
 
 def fit_and_tune_models(model, X, y, X_train, X_test, y_train, y_test, save_model_file_path):
-    best_params, test_data_accuracy_score = model.fit_and_tune_model(X, y, X_train, X_test, y_train, y_test, save_model_file_path)
+    model.fit_and_tune_model(X, y, X_train, X_test, y_train, y_test, save_model_file_path)
 
 
 def call_with_timeout(seconds, f, *args, **kwargs):

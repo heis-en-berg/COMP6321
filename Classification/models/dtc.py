@@ -1,6 +1,5 @@
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import RandomizedSearchCV
-from sklearn.metrics import accuracy_score
 import scipy
 import pickle
 
@@ -21,14 +20,8 @@ def fit_and_tune_model(X, y, X_train, X_test, y_train, y_test, save_model_file_p
             'criterion': ["gini", "entropy"]
             }
     dtc=DecisionTreeClassifier(random_state=0)
-    randcv = RandomizedSearchCV(dtc, param_distributions, n_iter=50, random_state=0, cv=5)
+    randcv = RandomizedSearchCV(dtc, param_distributions, random_state=0, cv=5)
     randcv.fit(X_train, y_train)
     
     # final training
     train_and_save_final_model(X, y, randcv.best_params_, save_model_file_path)
-    
-    # Test Data Accuracy Score
-    y_test_pred = randcv.best_estimator_.predict(X_test)
-    best_params = randcv.best_params_
-    test_data_accuracy_score = accuracy_score(y_test, y_test_pred)
-    return best_params, test_data_accuracy_score
