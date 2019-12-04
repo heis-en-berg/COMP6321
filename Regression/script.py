@@ -27,82 +27,105 @@ warnings.filterwarnings("ignore", category=ConvergenceWarning)
 
 current_directory = os.getcwd()
 
-TIMEOUT = 60.0 # seconds
+TIMEOUT = 3600.0 # seconds
 list_of_models = [dtr, adbr, gpr, lr, nnr, rfr, svr]
 
-# Breast Cancer Winsconsin
-bike_sharing_eval_models("./BikeSharing/data/hour.csv", 
-                list_of_models, 
-                current_directory + '/BikeSharing/saved_models/', 
-                TIMEOUT)
+try:
+    # BikeSharing
+    bike_sharing_eval_models("./BikeSharing/data/hour.csv", 
+                    list_of_models, 
+                    current_directory + '/BikeSharing/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: BikeSharing")
 
-# Default Of Credit Card Clients
-student_performance_card_eval_models("./StudentPerformance/data/student-por.csv", 
-                list_of_models, 
-                current_directory + '/StudentPerformance/saved_models/', 
-                TIMEOUT)
+try:
+    # StudentPerformance
+    student_performance_card_eval_models("./StudentPerformance/data/student-por.csv", 
+                    list_of_models, 
+                    current_directory + '/StudentPerformance/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: StudentPerformance")
 
-# ConcreteCompressiveStrength
-concrete_compressive_eval_models("./ConcreteCompressiveStrength/data/Concrete_Data.xls", 
-                list_of_models, 
-                current_directory + '/ConcreteCompressiveStrength/saved_models/', 
-                TIMEOUT)
+try:
+    # ConcreteCompressiveStrength
+    concrete_compressive_eval_models("./ConcreteCompressiveStrength/data/Concrete_Data.xls", 
+                    list_of_models, 
+                    current_directory + '/ConcreteCompressiveStrength/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: ConcreteCompressiveStrength")
 
-# WineQuality
-wine_quality_eval_models("./WineQuality/data/winequality-red.csv", 
-                list_of_models, 
-                current_directory + '/WineQuality/saved_models/', 
-                TIMEOUT)
+try:
+    # WineQuality
+    wine_quality_eval_models("./WineQuality/data/winequality-red.csv", 
+                    list_of_models, 
+                    current_directory + '/WineQuality/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: WineQuality")
 
-# CommunitesAndCrime
-communities_and_crime_eval_models("./CommunitesAndCrime/data/communities.data", 
-                list_of_models, 
-                current_directory + '/CommunitesAndCrime/saved_models/', 
-                TIMEOUT)
+try:
+    # CommunitesAndCrime
+    communities_and_crime_eval_models("./CommunitesAndCrime/data/communities.data", 
+                    list_of_models, 
+                    current_directory + '/CommunitesAndCrime/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: CommunitesAndCrime")
 
-# QSARAquaticToxicity
-qsar_eval_models("./QSARAquaticToxicity/data/qsar_aquatic_toxicity.csv", 
-                list_of_models, 
-                current_directory + '/QSARAquaticToxicity/saved_models/', 
-                TIMEOUT)
+try:
+    # QSARAquaticToxicity
+    qsar_eval_models("./QSARAquaticToxicity/data/qsar_aquatic_toxicity.csv", 
+                    list_of_models, 
+                    current_directory + '/QSARAquaticToxicity/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: QSARAquaticToxicity")
 
-# SteelPlatesFaults
-parkinson_speech_eval_models("./ParkinsonSpeech/data/train_data.txt", 
-                list_of_models, 
-                current_directory + '/ParkinsonSpeech/saved_models/', 
-                TIMEOUT)
+try:
+    # ParkinsonSpeech
+    parkinson_speech_eval_models("./ParkinsonSpeech/data/train_data.txt", 
+                    list_of_models, 
+                    current_directory + '/ParkinsonSpeech/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: ParkinsonSpeech")
 
-# Yeast
-facebook_metrics_eval_models("./FacebookMetrics/data/dataset_Facebook.csv", 
-                list_of_models, 
-                current_directory + '/FacebookMetrics/saved_models/', 
-                TIMEOUT)
+try:
+    # FacebookMetrics
+    facebook_metrics_eval_models("./FacebookMetrics/data/dataset_Facebook.csv", 
+                    list_of_models, 
+                    current_directory + '/FacebookMetrics/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: FacebookMetrics")
 
-# SGEMM_GPUKernelPerformance
-gpu_kernel_eval_models("./SGEMM_GPUKernelPerformance/data/sgemm_product.csv", 
-                list_of_models, 
-                current_directory + '/SGEMM_GPUKernelPerformance/saved_models/', 
-                TIMEOUT)
-
-
-# MerckMolecularActivity
-merck_moecular_eval_models("./MerckMolecularActivity/data/ACT2_competition_training.csv", 
-                list_of_models, 
-                current_directory + '/MerckMolecularActivity/saved_models/', 
-                TIMEOUT)
-
-# MerckMolecularActivity
-merck_moecular_eval_models("./MerckMolecularActivity/data/ACT4_competition_training.csv", 
-                list_of_models, 
-                current_directory + '/MerckMolecularActivity/saved_models/', 
-                TIMEOUT)
+try:
+    # SGEMM_GPUKernelPerformance
+    gpu_kernel_eval_models("./SGEMM_GPUKernelPerformance/data/sgemm_product.csv", 
+                    list_of_models, 
+                    current_directory + '/SGEMM_GPUKernelPerformance/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: SGEMM_GPUKernelPerformance")
 
 
-# initializing dataset dictionary with dataset name as keys and filepath as values
-datasets = {
-        "Diabetic Retinopathy": "./data/wdbc.data",
-        "Default of credit card clients": "",
-        "Breast Cancer Wisconsin": "",
-        "Statlog Australian credit approval)": "",
-        "Statlog German credit data)": ""
-        }
+try:
+    # MerckMolecularActivity ACT2_competition_training
+    merck_moecular_eval_models("./MerckMolecularActivity/data/ACT2_competition_training.csv", 
+                    list_of_models, 
+                    current_directory + '/MerckMolecularActivity/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: MerckMolecularActivity ACT2_competition_training")
+
+try:
+    # MerckMolecularActivity ACT4_competition_training
+    merck_moecular_eval_models("./MerckMolecularActivity/data/ACT4_competition_training.csv", 
+                    list_of_models, 
+                    current_directory + '/MerckMolecularActivity/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: MerckMolecularActivity ACT4_competition_training")

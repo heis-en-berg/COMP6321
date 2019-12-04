@@ -28,75 +28,95 @@ warnings.filterwarnings("ignore", category=ConvergenceWarning)
 
 current_directory = os.getcwd()
 
-TIMEOUT = 5.0 # seconds
+TIMEOUT = 3600.0 # seconds
 list_of_models = [dtc, adbc, gnbc, knn, lrc, mlp, rfc, svc]
 
-# Breast Cancer Winsconsin
-breast_cancer_winsconsin_eval_models("./BreastCancerWinsconsin/data/wdbc.data", 
-                list_of_models, 
-                current_directory + '/BreastCancerWinsconsin/saved_models/', 
-                TIMEOUT)
+try:
+    # Breast Cancer Winsconsin
+    breast_cancer_winsconsin_eval_models("./BreastCancerWinsconsin/data/wdbc.data", 
+                    list_of_models, 
+                    current_directory + '/BreastCancerWinsconsin/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: Breast Cancer Winsconsin")
 
-# Default Of Credit Card Clients
-default_credit_card_eval_models("./DefaultOfCreditCardClients/data/data.xls", 
-                list_of_models, 
-                current_directory + '/DefaultOfCreditCardClients/saved_models/', 
-                TIMEOUT)
+try:
+    # Default Of Credit Card Clients
+    default_credit_card_eval_models("./DefaultOfCreditCardClients/data/data.xls", 
+                    list_of_models, 
+                    current_directory + '/DefaultOfCreditCardClients/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: Default Of Credit Card Clients")
 
-# Diabetic Retinopathy
-diabetic_retinopathy_eval_models("./DiabeticRetinopathy/data/messidor_features.arff", 
-                list_of_models, 
-                current_directory + '/DiabeticRetinopathy/saved_models/', 
-                TIMEOUT)
+try:
+    # Diabetic Retinopathy
+    diabetic_retinopathy_eval_models("./DiabeticRetinopathy/data/messidor_features.arff", 
+                    list_of_models, 
+                    current_directory + '/DiabeticRetinopathy/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: Diabetic Retinopathy")
 
-# StatlogAustralianCreditApproval
-statlog_australian__eval_models("./StatlogAustralianCreditApproval/data/australian.dat", 
-                list_of_models, 
-                current_directory + '/StatlogAustralianCreditApproval/saved_models/', 
-                TIMEOUT)
+try:
+    # StatlogAustralianCreditApproval
+    statlog_australian__eval_models("./StatlogAustralianCreditApproval/data/australian.dat", 
+                    list_of_models, 
+                    current_directory + '/StatlogAustralianCreditApproval/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: StatlogAustralianCreditApproval")
 
-# StatlogGermanCreditData
-statog_german_eval_models("./StatlogGermanCreditData/data/german.data-numeric", 
-                list_of_models, 
-                current_directory + '/StatlogGermanCreditData/saved_models/', 
-                TIMEOUT)
+try:
+    # StatlogGermanCreditData
+    statog_german_eval_models("./StatlogGermanCreditData/data/german.data-numeric", 
+                    list_of_models, 
+                    current_directory + '/StatlogGermanCreditData/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: StatlogGermanCreditData")
 
-# Adult
-adult_eval_models("./Adult/data/adult.data", 
-                list_of_models, 
-                current_directory + '/Adult/saved_models/', 
-                TIMEOUT)
+try:
+    # Adult
+    adult_eval_models("./Adult/data/adult.data", 
+                    list_of_models, 
+                    current_directory + '/Adult/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: Adult")
 
-# SteelPlatesFaults
-steel_plates_eval_models("./SteelPlatesFaults/data/Faults.NNA", 
-                list_of_models, 
-                current_directory + '/SteelPlatesFaults/saved_models/', 
-                TIMEOUT)
+try:
+    # SteelPlatesFaults
+    steel_plates_eval_models("./SteelPlatesFaults/data/Faults.NNA", 
+                    list_of_models, 
+                    current_directory + '/SteelPlatesFaults/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: SteelPlatesFaults")
 
-# Yeast
-yeast_eval_models("./Yeast/data/yeast.data", 
-                list_of_models, 
-                current_directory + '/Yeast/saved_models/', 
-                TIMEOUT)
+try:
+    # Yeast
+    yeast_eval_models("./Yeast/data/yeast.data", 
+                    list_of_models, 
+                    current_directory + '/Yeast/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: Yeast")
 
-# ThoracicSurgeryData
-thoraric_eval_models("./ThoracicSurgeryData/data/ThoraricSurgery.arff", 
-                list_of_models, 
-                current_directory + '/ThoracicSurgeryData/saved_models/', 
-                TIMEOUT)
+try:
+    # ThoracicSurgeryData
+    thoraric_eval_models("./ThoracicSurgeryData/data/ThoraricSurgery.arff", 
+                    list_of_models, 
+                    current_directory + '/ThoracicSurgeryData/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: ThoracicSurgeryData")
 
-# SeismicBumps
-sesamic_bumps_eval_models("./SeismicBumps/data/seismic-bumps.arff", 
-                list_of_models, 
-                current_directory + '/SeismicBumps/saved_models/', 
-                TIMEOUT)
-
-# initializing dataset dictionary with dataset name as keys and filepath as values
-datasets = {
-        "Diabetic Retinopathy": "./data/wdbc.data",
-        "Default of credit card clients": "",
-        "Breast Cancer Wisconsin": "",
-        "Statlog Australian credit approval)": "",
-        "Statlog German credit data)": ""
-        }
-
+try:
+    # SeismicBumps
+    sesamic_bumps_eval_models("./SeismicBumps/data/seismic-bumps.arff", 
+                    list_of_models, 
+                    current_directory + '/SeismicBumps/saved_models/', 
+                    TIMEOUT)
+except:
+    print("Something went wrong while evaluating models for dataset: SeismicBumps")
