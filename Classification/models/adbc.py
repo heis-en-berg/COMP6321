@@ -3,16 +3,20 @@ from sklearn.model_selection import RandomizedSearchCV
 import scipy.stats
 import pickle
 
-def train_and_save_final_model(X, y, params, save_model_file_path):
+def train_and_save_final_model(X, y, X_train, y_train, params, save_model_file_path, test_data):
     adbc=AdaBoostClassifier(random_state=0)
     adbc.set_params(**params)
-    adbc.fit(X, y)
+    
+    if test_data == None:
+        adbc.fit(X_train, y_train)
+    else:
+        adbc.fit(X, y)
     
     #save model
     model_file_path = save_model_file_path + 'adbc.sav'
     pickle.dump(adbc, open(model_file_path, 'wb'))
 
-def fit_and_tune_model(X, y, X_train, X_test, y_train, y_test, save_model_file_path):
+def fit_and_tune_model(X, y, X_train, X_test, y_train, y_test, save_model_file_path, test_data):
     # cross validation for hyperparameter tuning
     param_distributions = {
             'n_estimators': scipy.stats.randint(50,200),
@@ -23,4 +27,4 @@ def fit_and_tune_model(X, y, X_train, X_test, y_train, y_test, save_model_file_p
     randcv.fit(X_train, y_train)
     
     # final training
-    train_and_save_final_model(X, y, randcv.best_params_, save_model_file_path)
+    train_and_save_final_model(X, y, X_train, y_train, randcv.best_params_, save_model_file_path, test_data)

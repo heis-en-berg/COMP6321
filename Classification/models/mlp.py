@@ -2,16 +2,20 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import RandomizedSearchCV
 import pickle
 
-def train_and_save_final_model(X, y, params, save_model_file_path):
+def train_and_save_final_model(X, y, X_train, y_train, params, save_model_file_path, test_data):
     mlp=MLPClassifier(random_state=0)
     mlp.set_params(**params)
-    mlp.fit(X, y)
+    
+    if test_data == None:
+        mlp.fit(X_train, y_train)
+    else:
+        mlp.fit(X, y)
     
     #save model
     model_file_path = save_model_file_path + 'mlp.sav'
     pickle.dump(mlp, open(model_file_path, 'wb'))
 
-def fit_and_tune_model(X, y, X_train, X_test, y_train, y_test, save_model_file_path):
+def fit_and_tune_model(X, y, X_train, X_test, y_train, y_test, save_model_file_path, test_data):
     # cross validation for hyperparameter tuning
     param_distributions = {
             'hidden_layer_sizes': [(100,50,), (100,50,20,)],
@@ -23,4 +27,4 @@ def fit_and_tune_model(X, y, X_train, X_test, y_train, y_test, save_model_file_p
     randcv.fit(X_train, y_train)
     
     # final training
-    train_and_save_final_model(X, y, randcv.best_params_, save_model_file_path)
+    train_and_save_final_model(X, y, X_train, y_train, randcv.best_params_, save_model_file_path, test_data)
