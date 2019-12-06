@@ -7,10 +7,11 @@ import os
 list_of_models = [dtc, cnn, am]
 current_directory = os.getcwd()
 TIMEOUT = 600.0 # seconds
+data_path="./data/"
 
 try:
     # Decision Tree on CIFAR-10
-    CIFAR10("./data/", 
+    CIFAR10(data_path, 
                     list_of_models, 
                     current_directory + '/saved_models/', 
                     TIMEOUT)
